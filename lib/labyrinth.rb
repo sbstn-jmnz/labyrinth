@@ -58,10 +58,17 @@ class Labyrinth
   end
 
   def exit_arround?(pos)
-    [:up,:down,:left,:right].each do |dir|
-       return if is_exit?(send(dir,pos))
+    if is_exit?(up(pos))
+      return 'up'
+    elsif is_exit?(down(pos))
+      return 'down'
+    elsif is_exit?(left(pos))
+      return 'left'
+    elsif is_exit?(right(pos))
+      return 'right'
+    else
+      return false
     end
-    false
   end
 
   def solve
@@ -76,6 +83,8 @@ class Labyrinth
             traveled_path.push(p)
           if exit_arround?(p)
             puts traveled_path
+            puts " just go #{ exit_arround?(p) }"
+            break
           end
         end
       end
