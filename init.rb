@@ -21,7 +21,7 @@ puts
 puts "This is the labyrinth generated for you:
     #{lab.description}"
 puts
-puts "...and your current position is: #{lab.current_pos}"
+puts "your current position is: #{lab.current_pos} and the exit is at #{lab.exit}"
 puts
 puts "Would you like to get out (y/n)"
      answer = gets.chomp.to_s.downcase
