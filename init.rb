@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require_relative('lib/labyrinth')
 puts
 puts "Welcome to Labyrinth"
@@ -16,27 +15,16 @@ print "Width: "
 print "Num of walls: "
   num_of_walls = gets.chomp.to_i
 
-lab = Labyrinth.new(
-  top_left_corner: height,
-  width: width,
-  walls: num_of_walls)
+  lab = Labyrinth.new(top_left_corner: height, width: width, walls: num_of_walls)
 
 puts
 puts "This is the labyrinth generated for you:
-
-  #{lab.description}"
+    #{lab.description}"
 puts
-
-puts "...and your current position is: "
-
-puts lab.current_pos
-
+puts "...and your current position is: #{lab.current_pos}"
 puts
-
 puts "Would you like to get out (y/n)"
-
-  answer = gets.chomp.to_s.downcase
-
+     answer = gets.chomp.to_s.downcase
 
 def answer(answer, lab)
   case answer
@@ -47,7 +35,7 @@ def answer(answer, lab)
     else
       puts "Don't fool arround yes or no (y/n)"
       answer = gets.chomp.to_s.downcase
-      answer(answer)
+      answer(answer, lab)
   end
 end
 

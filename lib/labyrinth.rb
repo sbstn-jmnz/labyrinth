@@ -1,37 +1,63 @@
 # Labyrinths are rectangulars and they have to have an exit
 # allocated on one of its externals walls.
 # They also have internals walls
-require 'active_support'
+require 'byebug'
 
 class Labyrinth
-  attr_accessor :exit
-  attr_accessor :top_left_corner
-  attr_accessor :width
-  attr_accessor :walls
-  attr_accessor :current_pos
-
+  attr_accessor :exit, :top_left_corner, :width, :walls, :current_pos, :used_pos, :adjacents
+  #initial pos shouldn't be on top of external walls
   def initialize(options={})
     self.top_left_corner = options[:top_left_corner] || 5
     self.width = options[:width] || 5
     self.walls = generate_walls(options[:walls] || 5)
     self.exit = generate_exit
-    #initial pos shouldn't be on top of external walls
     self.current_pos = { y: Random.new.rand(1..(@top_left_corner-1)), x: Random.new.rand(1..(@width-1)) }
+    self.adjacents = []
   end
-
-  def is_exit?(pos)
-    return pos == @exit
-  end
-
 
   def description
-    "   It has #{self.top_left_corner.to_s} units of height,\n
+    "It has #{self.top_left_corner.to_s} units of height,\n
      it has #{self.width} units of width and \n
      it has the following internal walls #{self.walls}"
   end
 
+  def is_exit?(pos); pos == @exit ; end
+
+  def up(pos)
+    { y: pos[:y] += 1, x: pos[:x] }
+  end
+  def down(pos); pos[:y] -= 1; return pos; end
+  def left(pos); pos[:x] -= 1; return pos; end
+  def right(pos);pos[:x] += 1; return pos; end
+
+  def permited_move?(pos,move)
+    #check if the move dosen't crash with a bound or a wall
+    case move
+      when 'up'
+        !@walls.include?({ y: pos[:y] + 1, x: pos[:x] }) && (pos[:y] + 1) < @top_left_corner
+      when 'down'
+        !@walls.include?({ y: pos[:y] - 1, x: pos[:x] }) && (pos[:y] -1)  > 0
+      when 'left'
+        !@walls.include?({ y: pos[:y], x: pos[:x] - 1 }) && (pos[:x] - 1) > 0
+      when 'right'
+        !@walls.include?({ y: pos[:y], x: pos[:x] + 1 }) && (pos[:x] + 1) < @width
+    end
+  end
+
+  def find_adjacents(pos)
+    @adjacents.push up(pos) if permited_move?(pos,'up')
+    @adjacents.push down(pos) if permited_move?(pos,'down')
+    @adjacents.push left(pos) if permited_move?(pos,'left')
+    @adjacents.push right(pos) if permited_move?(pos,'right')
+  end
+
   def solve
-    puts "you are out"
+    find_adjacents(current_pos)
+    debugger
+    while !is_exit?(current_pos)
+    end
+      puts "you are out!! after #{num_of_moves} moves"
+      puts exit, current_pos
   end
 
 protected
@@ -44,16 +70,17 @@ protected
       when 2
         { y: Random.rand(top_left_corner), x: 0 }
       when 3
-        { y: :top_left_corner, x: Random.rand(width) }
+        { y: top_left_corner, x: Random.rand(width) }
       when 4
-        { y: Random.rand(top_left_corner), x: :width }
+        { y: Random.rand(top_left_corner), x: width }
     end
   end
 
+#For simplification walls are just dots
   def generate_walls(num_of_walls)
-    num_of_walls.times.map{
+    num_of_walls.times.map do
       { y: Random.rand(top_left_corner), x: Random.rand(width)}
-    }
+    end
   end
 
 end
