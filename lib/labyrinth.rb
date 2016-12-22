@@ -22,7 +22,7 @@ class Labyrinth
   end
 
   def description
-    "It has #{self.top_left_corner.to_s} units of height,\n
+    " It has #{self.top_left_corner.to_s} units of height,\n
      it has #{self.width} units of width and \n
      it has the following internal walls #{self.walls}"
   end
@@ -82,6 +82,7 @@ class Labyrinth
             node_queue.push(p)
             traveled_path.push(p)
           if exit_arround?(p)
+            puts
             puts traveled_path
             puts " just go #{ exit_arround?(p) }"
             break
