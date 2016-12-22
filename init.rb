@@ -19,7 +19,7 @@ print "Num of walls: "
 
 puts
 puts "This is the labyrinth generated for you:
-    #{lab.description}"
+     #{lab.description}"
 puts
 puts "your current position is: #{lab.current_pos} and the exit is at #{lab.exit}"
 puts
